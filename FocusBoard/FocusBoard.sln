@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28516.95
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FocusBoardUnitTests", "FocusBoardUnitTests\FocusBoardUnitTests.csproj", "{F221F474-4538-419C-B322-FDCE3F06ADAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FocusBoardCore", "FocusBoardCore\FocusBoardCore.csproj", "{A3CD504C-C930-43CD-9103-25ECF131115C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F221F474-4538-419C-B322-FDCE3F06ADAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F221F474-4538-419C-B322-FDCE3F06ADAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F221F474-4538-419C-B322-FDCE3F06ADAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F221F474-4538-419C-B322-FDCE3F06ADAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3CD504C-C930-43CD-9103-25ECF131115C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3CD504C-C930-43CD-9103-25ECF131115C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3CD504C-C930-43CD-9103-25ECF131115C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3CD504C-C930-43CD-9103-25ECF131115C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B205772-604B-4BDA-8D1D-73B9CE9BD748}
+	EndGlobalSection
+EndGlobal
