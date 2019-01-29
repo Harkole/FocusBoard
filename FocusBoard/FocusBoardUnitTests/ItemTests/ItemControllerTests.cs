@@ -5,11 +5,6 @@ namespace FocusBoardUnitTests.ItemTests
 {
     public class ItemControllerTest
     {
-        [Fact]
-        public void Test1()
-        {
-
-        }
-        
+                
     }
 }
