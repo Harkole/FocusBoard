@@ -16,7 +16,7 @@ namespace FocusBoardCore.Interfaces
         Task<Item> GetItemByIdAsync(string Id, CancellationToken cancellationToken = default(CancellationToken));
 
         // Update
-        Task UpdateItemAsync(Item item, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Item> UpdateItemAsync(Item item, CancellationToken cancellationToken = default(CancellationToken));
 
         // Delete
         Task DeleteItemAsync(string Id, CancellationToken cancellationToken = default(CancellationToken));
