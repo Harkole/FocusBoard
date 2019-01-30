@@ -13,12 +13,12 @@ namespace FocusBoardCore.Interfaces
         // Read
         Task<IEnumerable<Item>> GetAllItemsAsync(CancellationToken cancellationToken = default(CancellationToken));
         Task<IEnumerable<Item>> GetItemsByAuthorAsync(string authorId, CancellationToken cancellationToken = default(CancellationToken));
-        Task<Item> GetItemByIdAsync(string Id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Item> GetItemByIdAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
 
         // Update
         Task<Item> UpdateItemAsync(Item item, CancellationToken cancellationToken = default(CancellationToken));
 
         // Delete
-        Task DeleteItemAsync(string Id, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteItemAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

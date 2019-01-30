@@ -33,24 +33,7 @@ namespace FocusBoardUnitTests.ItemTests
             ItemRepositoryMock = new Mock<IItemRepository>();
             ServiceUnderTest = new ItemService(ItemRepositoryMock.Object);
         }
-
-        #region Get All Items
-
-        [Fact]
-        public async Task Should_return_all_Items()
-        {
-            // Arrange
-            ItemRepositoryMock.Setup(x => x.GetAllItemsAsync(default(CancellationToken))).ReturnsAsync(MockDataItems);
-
-            // Act
-            IEnumerable<Item> resultItems = await ServiceUnderTest.GetAllItemsAsync(default(CancellationToken));
-
-            // Assert
-            Assert.Same(MockDataItems, resultItems);
-        }
-
-        #endregion
-
+        
         #region Get Items By Author
 
         [Fact]
@@ -182,12 +165,27 @@ namespace FocusBoardUnitTests.ItemTests
             // Arrange
             Item newItem = new Item { Id = Guid.NewGuid().ToString(), Author = "Jane Smith", HideAuthor = true, Title = "Adding new items is too simple", Description = "I think it needs to have more clicks to add an item", Votes = -7 };
             ItemRepositoryMock.Setup(x => x.UpdateItemAsync(newItem, default(CancellationToken))).ReturnsAsync(newItem.Id);
+            ItemRepositoryMock.Setup(x => x.GetItemByIdAsync(newItem.Id, default(CancellationToken))).ReturnsAsync(newItem);
 
             // Act
             Item resultItem = await ServiceUnderTest.UpdateItemAsync(newItem, default(CancellationToken));
 
             // Assert
-            Assert.Same(newItem, resultItem);
+            Assert.Equal(newItem, resultItem);
+        }
+
+        [Fact]
+        public async Task Should_fail_update_missing_identity()
+        {
+            // Arrange
+            Item newItem = new Item { Id = string.Empty, Author = "Jane Smith", HideAuthor = true, Title = "Adding new items is too simple", Description = "I think it needs to have more clicks to add an item", Votes = -7 };
+            ItemRepositoryMock.Setup(x => x.UpdateItemAsync(newItem, default(CancellationToken))).ReturnsAsync(newItem.Id);
+
+            // Act
+            ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.UpdateItemAsync(newItem, default(CancellationToken)));
+
+            // Assert
+            Assert.Equal(nameof(newItem.Id), exception.ParamName);
         }
 
         [Fact]
@@ -198,7 +196,7 @@ namespace FocusBoardUnitTests.ItemTests
 
             // Act & Assert
             ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.UpdateItemAsync(newItem, default(CancellationToken)));
-            Assert.Same(nameof(exception.ParamName), nameof(newItem.Author));
+            Assert.Equal(nameof(newItem.Author), exception.ParamName);
         }
 
         [Fact]
@@ -209,7 +207,7 @@ namespace FocusBoardUnitTests.ItemTests
 
             // Act & Assert
             ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.UpdateItemAsync(newItem, default(CancellationToken)));
-            Assert.Same(nameof(exception.ParamName), nameof(newItem.Title));
+            Assert.Equal(nameof(newItem.Title), exception.ParamName);
         }
         
         [Fact]
@@ -220,14 +218,25 @@ namespace FocusBoardUnitTests.ItemTests
 
             // Act & Assert
             ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.UpdateItemAsync(newItem, default(CancellationToken)));
-            Assert.Same(nameof(exception.ParamName), nameof(newItem.Description));
+            Assert.Equal(nameof(newItem.Description), exception.ParamName);
         }
 
         #endregion
 
         #region Delete Item
 
-        // No tests on Mock Repository are possible, those that are would be pointless
+        [Fact]
+        public async Task Should_fail_delete_missing_id()
+        {
+            // Arrange
+            string id = string.Empty;
+
+            // Act
+            ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.DeleteItemAsync(id, default(CancellationToken)));
+
+            // Assert
+            Assert.Equal(nameof(id), exception.ParamName);
+        }
 
         #endregion
     }
