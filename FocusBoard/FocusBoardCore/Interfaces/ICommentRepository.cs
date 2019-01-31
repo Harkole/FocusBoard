@@ -8,7 +8,7 @@ namespace FocusBoardCore.Interfaces
     public interface ICommentRepository
     {
 
-        Task<string> CreateNewComment(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
+        Task<string> CreateNewCommentAsync(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<IEnumerable<Comment>> GetCommentsByItem(string itemId, CancellationToken cancellationToken = default(CancellationToken));
         Task<IEnumerable<Comment>> GetCommentByAuthor(string authorId, CancellationToken cancellationToken = default(CancellationToken));
