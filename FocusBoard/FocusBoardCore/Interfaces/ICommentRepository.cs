@@ -10,9 +10,10 @@ namespace FocusBoardCore.Interfaces
 
         Task<string> CreateNewCommentAsync(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<IEnumerable<Comment>> GetCommentsByItem(string itemId, CancellationToken cancellationToken = default(CancellationToken));
-        Task<IEnumerable<Comment>> GetCommentByAuthor(string authorId, CancellationToken cancellationToken = default(CancellationToken));
-        Task<IEnumerable<Comment>> GetCommentsByVotes(int minVoteCount, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Comment> GetCommentById(string id, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IEnumerable<Comment>> GetCommentsByParentAsync(string parentId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IEnumerable<Comment>> GetCommentByAuthorAsync(string authorId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<IEnumerable<Comment>> GetCommentsByVotesAsync(int minVoteCount, CancellationToken cancellationToken = default(CancellationToken));
 
         Task<string> UpdateCommentAsync(Comment comment, CancellationToken cancellationToken = default(CancellationToken));
 
