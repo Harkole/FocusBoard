@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Moq;
-using FocusBoardCore.Interfaces;
-using System.Collections.ObjectModel;
+﻿using FocusBoardCore.Interfaces;
 using FocusBoardCore.Models;
 using FocusBoardCore.Services;
-using System.Threading.Tasks;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace FocusBoardUnitTests.CommentTests
 {
@@ -41,8 +41,11 @@ namespace FocusBoardUnitTests.CommentTests
         public async Task Should_create_new_comment()
         {
             // Arrange
-            Comment newComment = new Comment { AuthorId = Guid.NewGuid().ToString(), ParentId = Guid.NewGuid().ToString(), Value = "This new comment is awesome", Votes = 0 };
-            CommentRepositoryMock.Setup(x => x.CreateNewCommentAsync(newComment, default(CancellationToken))).ReturnsAsync(Guid.NewGuid().ToString());
+            string newId = Guid.NewGuid().ToString();
+            Comment newComment = new Comment { Id = newId, AuthorId = Guid.NewGuid().ToString(), ParentId = Guid.NewGuid().ToString(), Value = "This new comment is awesome", Votes = 0 };
+            
+            CommentRepositoryMock.Setup(x => x.CreateNewCommentAsync(newComment, default(CancellationToken))).ReturnsAsync(newId);
+            CommentRepositoryMock.Setup(x => x.GetCommentById(newId, default(CancellationToken))).ReturnsAsync(newComment);
 
             // Act
             Comment resultComment = await ServiceUnderTest.CreateNewCommentAsync(newComment, default(CancellationToken));
@@ -97,7 +100,79 @@ namespace FocusBoardUnitTests.CommentTests
         #endregion
 
         #region Read
+        [Fact]
+        public async Task Should_return_items_by_parent()
+        {
+            // Arrange
+            string parentId = MockDataItems[2].ParentId;
+            CommentRepositoryMock.Setup(x => x.GetCommentsByParentAsync(parentId, default(CancellationToken))).ReturnsAsync(MockDataItems.Where(v => v.ParentId == parentId));
 
+            // Act
+            IEnumerable<Comment> resultComments = await ServiceUnderTest.GetCommentsByParentAsync(parentId, default(CancellationToken));
+
+            // Assert
+            Assert.Equal(MockDataItems.Where(v => v.ParentId == parentId), resultComments);
+        }
+
+        [Fact]
+        public async Task Should_return_null_when_parent_not_found()
+        {
+            // Arrange
+            string parentId = Guid.NewGuid().ToString();
+            CommentRepositoryMock.Setup(x => x.GetCommentsByParentAsync(parentId, default(CancellationToken))).ReturnsAsync(MockDataItems.Where(v => v.ParentId == parentId));
+
+            // Act
+            IEnumerable<Comment> resultComments = await ServiceUnderTest.GetCommentsByParentAsync(parentId, default(CancellationToken));
+
+            // Assert
+            Assert.Empty(resultComments);
+
+        }
+
+        [Fact]
+        public async Task Should_fail_to_return_by_parent_no_value()
+        {
+
+            // Arrange
+            string parentId = string.Empty;
+
+            // Act
+            ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.GetCommentsByParentAsync(parentId, default(CancellationToken)));
+
+            // Assert
+            Assert.Equal(nameof(parentId), exception.ParamName);
+        }
+
+        [Fact]
+        public async Task Should_return_items_by_author()
+        {
+            // Arrange
+            string authorId = MockDataItems[1].AuthorId;
+            CommentRepositoryMock.Setup(x => x.GetCommentByAuthorAsync(authorId, default(CancellationToken))).ReturnsAsync(MockDataItems.Where(i => i.AuthorId == authorId));
+
+            IEnumerable<Comment> expectedData = MockDataItems.Where(i => i.AuthorId == authorId);
+
+            // Act
+            IEnumerable<Comment> resultComments = await ServiceUnderTest.GetCommentByAuthorAsync(authorId, default(CancellationToken));
+
+            // Assert
+            Assert.Equal(expectedData, resultComments);
+        }
+
+        [Fact]
+        public async Task Should_return_null_when_author_not_found()
+        {
+            // Arrange
+            string authorId = Guid.NewGuid().ToString();
+            CommentRepositoryMock.Setup(x => x.GetCommentByAuthorAsync(authorId, default(CancellationToken))).ReturnsAsync(MockDataItems.Where(v => v.AuthorId == authorId));
+
+            // Act
+            IEnumerable<Comment> resultComments = await ServiceUnderTest.GetCommentByAuthorAsync(authorId, default(CancellationToken));
+
+            // Assert
+            Assert.Empty(resultComments);
+        }
+        
         #endregion
 
         #region Update
@@ -107,13 +182,15 @@ namespace FocusBoardUnitTests.CommentTests
         {
             // Arrange
             Comment newComment = new Comment { Id = Guid.NewGuid().ToString(), AuthorId = Guid.NewGuid().ToString(), ParentId = Guid.NewGuid().ToString(), Value = "I'm prone to changing my mind, maybe more than once", Votes = 0 };
-            CommentRepositoryMock.Setup(x => x.UpdateCommentAsync(newComment, default(CancellationToken))).ReturnsAsync(Guid.NewGuid().ToString());
+
+            CommentRepositoryMock.Setup(x => x.UpdateCommentAsync(newComment, default(CancellationToken))).ReturnsAsync(newComment.Id);
+            CommentRepositoryMock.Setup(x => x.GetCommentById(newComment.Id, default(CancellationToken))).ReturnsAsync(newComment);
 
             // Act
             Comment resultComment = await ServiceUnderTest.UpdateCommentAsync(newComment, default(CancellationToken));
 
             // Assert
-            Assert.Same(newComment, resultComment);
+            Assert.Equal(newComment, resultComment);
         }
 
         [Fact]
