@@ -80,7 +80,7 @@ namespace FocusBoardUnitTests
             string id = MockDataItems[1].Id;
             Actor expectedActor = MockDataItems[1];
 
-            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Id == id));
+            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Id == id));
 
             // Act
             Actor resultActor = await ServiceUnderTest.GetUserByIdAsync(id, default(CancellationToken));
@@ -95,7 +95,7 @@ namespace FocusBoardUnitTests
         {
             // Arrange
             string id = Guid.NewGuid().ToString();
-            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Id == id));
+            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Id == id));
 
             // Act
             Actor resultActor = await ServiceUnderTest.GetUserByIdAsync(id, default(CancellationToken));
@@ -109,7 +109,7 @@ namespace FocusBoardUnitTests
         {
             // Arrange
             string id = string.Empty;
-            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Id == id));
+            ActorRepositoryMock.Setup(x => x.GetActorByIdAsync(id, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Id == id));
 
             // Act
             ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.GetUserByIdAsync(id, default(CancellationToken)));
@@ -125,7 +125,7 @@ namespace FocusBoardUnitTests
             Actor exepctedActor = MockDataItems[1];
             string email = exepctedActor.Email;
 
-            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Email == email));
+            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Email == email));
 
             // Act
             Actor resultActor = await ServiceUnderTest.GetUserByEmailAsync(email, default(CancellationToken));
@@ -139,7 +139,7 @@ namespace FocusBoardUnitTests
         {
             // Arrange
             string email = "no.email@here.com";
-            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Email == email));
+            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Email == email));
 
             // Act
             Actor resultActor = await ServiceUnderTest.GetUserByEmailAsync(email, default(CancellationToken));
@@ -153,7 +153,7 @@ namespace FocusBoardUnitTests
         {
             // Arrange
             string email = string.Empty;
-            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.First(i => i.Email == email));
+            ActorRepositoryMock.Setup(x => x.GetActorByEmailAsync(email, default(CancellationToken))).ReturnsAsync(MockDataItems.FirstOrDefault(i => i.Email == email));
 
             // Act
             ArgumentNullException exception = await Assert.ThrowsAsync<ArgumentNullException>(() => ServiceUnderTest.GetUserByEmailAsync(email, default(CancellationToken)));
