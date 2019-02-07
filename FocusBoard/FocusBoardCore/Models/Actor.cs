@@ -12,7 +12,7 @@ namespace FocusBoardCore.Models
         [DataMember(Name = "email")]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email Address is required")]
         public string Email { get; set; } = string.Empty;
-
+               
         [DataMember(Name = "alias")]
         public string Alias { get; set; } = string.Empty;
 
